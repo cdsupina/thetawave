@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
+use iyes_progress::ProgressPlugin;
 use leafwing_input_manager::prelude::ActionState;
 use thetawave_interface::input::MenuAction;
 use thetawave_interface::input::MenuExplorer;
@@ -26,6 +27,8 @@ pub struct StatesPlugin;
 
 impl Plugin for StatesPlugin {
     fn build(&self, app: &mut App) {
+        app.add_plugins(ProgressPlugin::new(AppStates::LoadingAssets));
+
         app.add_loading_state(
             LoadingState::new(AppStates::LoadingAssets).continue_to_state(AppStates::MainMenu),
         )
@@ -97,6 +100,8 @@ impl Plugin for StatesPlugin {
             )
                 .chain(),
         );
+
+        app.add_systems(Update, print_state_system.run_if(in_state(AppStates::LoadingAssets)));
 
         app.add_systems(
             Update,
@@ -200,4 +205,8 @@ fn start_mainmenu_system(
         next_app_state.set(AppStates::MainMenu);
         next_game_state.set(GameStates::Playing);
     }
+}
+
+fn print_state_system(state: Res<State<AppStates>>) {
+    info!("State: {:?}", state);
 }
