@@ -1,3 +1,4 @@
+pub mod ability;
 pub mod animation;
 pub mod audio;
 pub mod character;
