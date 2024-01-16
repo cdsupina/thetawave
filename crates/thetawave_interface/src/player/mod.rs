@@ -1,10 +1,12 @@
-use crate::character::{Character, CharacterType};
 use bevy_ecs::prelude::Component;
 use bevy_ecs::system::Resource;
 use bevy_math::Vec2;
 use bevy_time::{Timer, TimerMode};
 use derive_more::{Deref, DerefMut};
 use serde::Deserialize;
+
+pub mod ability;
+pub mod character;
 
 /// Parameters for how to spawn new players. By default, the player can do anything.
 #[derive(Resource, Debug, Default, Deref, DerefMut)]
@@ -23,7 +25,7 @@ pub struct PlayersResource {
 
 #[derive(Debug, Clone)]
 pub struct PlayerData {
-    pub character: CharacterType,
+    pub character: character::CharacterType,
     pub input: PlayerInput,
 }
 
@@ -78,7 +80,7 @@ pub struct PlayerComponent {
     /// Timer for ability action
     pub ability_action_timer: Option<Timer>,
     /// Type of ability
-    pub ability_type: AbilityType,
+    pub ability_loadout: ability::AbilityLoadout,
     /// Whether the player responds to move inputs
     pub movement_enabled: bool,
     /// Multiplier for incoming damage
@@ -87,8 +89,8 @@ pub struct PlayerComponent {
     pub player_index: usize,
 }
 
-impl From<&Character> for PlayerComponent {
-    fn from(character: &Character) -> Self {
+impl From<&character::Character> for PlayerComponent {
+    fn from(character: &character::Character) -> Self {
         PlayerComponent {
             acceleration: character.acceleration,
             deceleration: character.deceleration,
@@ -101,7 +103,7 @@ impl From<&Character> for PlayerComponent {
             money: character.money,
             ability_cooldown_timer: Timer::from_seconds(character.ability_period, TimerMode::Once),
             ability_action_timer: None,
-            ability_type: character.ability_type.clone(),
+            ability_loadout: character.ability_loadout.clone(),
             movement_enabled: true,
             incoming_damage_multiplier: 1.0,
             player_index: 0,
@@ -110,7 +112,7 @@ impl From<&Character> for PlayerComponent {
 }
 impl PlayerComponent {
     pub fn from_character_with_params(
-        character: &Character,
+        character: &character::Character,
         spawn_params: &InputRestrictionsAtSpawn,
     ) -> Self {
         let mut res = Self::from(character);
@@ -128,10 +130,4 @@ impl PlayerComponent {
     pub fn enable_special_attacks(&mut self) {
         self.ability_cooldown_timer.unpause();
     }
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub enum AbilityType {
-    Charge(f32),    // ability duration
-    MegaBlast(f32), // scale and damage multiplier
 }

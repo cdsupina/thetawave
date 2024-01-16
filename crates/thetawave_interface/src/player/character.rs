@@ -1,9 +1,9 @@
 use bevy_math::Vec2;
 use serde::Deserialize;
 
+use super::ability;
 use crate::{
     health::HealthComponent,
-    player::AbilityType,
     weapon::{WeaponComponent, WeaponData},
 };
 
@@ -48,8 +48,8 @@ pub struct Character {
     pub money: usize,
     /// Ability cooldown time
     pub ability_period: f32,
-    /// Type of ability
-    pub ability_type: AbilityType,
+    /// All of the player abilities
+    pub ability_loadout: ability::AbilityLoadout,
     /// Describes the player's weapon
     pub weapon: WeaponData,
 }
