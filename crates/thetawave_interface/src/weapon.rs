@@ -58,26 +58,27 @@ pub struct WeaponProjectileData {
     /// Projectile type that the weapon spawns
     pub ammunition: ProjectileType,
     /// Damage of each projectile spawned by the weapon
-    pub damage: usize,
+    pub damage: Option<usize>,
     /// Position to spawn projectiles, either relative to the source or global
-    pub position: SpawnPosition,
+    pub position: Option<SpawnPosition>,
     /// Base speed of spawned projectiles
-    pub speed: f32,
+    pub speed: Option<f32>,
     /// Angle in radians of spawned projectiles
     pub direction: f32,
     /// Time before spawned projectiles despawn
-    pub despawn_time: f32,
+    pub despawn_time: Option<f32>,
     /// Number of projectiles spawned at once
-    pub count: usize,
+    pub count: Option<usize>,
     /// How projectiles are organized when they spawn
-    pub spread_pattern: SpreadPattern,
+    pub spread_pattern: Option<SpreadPattern>,
     /// Size multiplier of the projectile
-    pub size: f32,
+    pub size: Option<f32>,
     /// Sound that the weapon makes when fired
     pub sound: SoundEffectType,
 }
 
 /// Describes how projectiles are spawned
+/// Optional values are derived when None
 #[derive(Component, Clone)]
 pub struct WeaponComponent {
     /// Base reload time of the weapon

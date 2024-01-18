@@ -18,6 +18,7 @@ pub struct InputRestrictions {
     pub forbid_main_attack_reason: Option<String>,
     pub forbid_special_attack_reason: Option<String>,
 }
+
 #[derive(Resource, Debug)]
 pub struct PlayersResource {
     pub player_data: Vec<Option<PlayerData>>,
