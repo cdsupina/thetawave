@@ -16,13 +16,13 @@ pub enum FireMode {
     Manual,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub enum SpreadPattern {
     Arc(ArcPatternData),
     Random(RandomPatternData),
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct ArcPatternData {
     /// Determines the shape of the arc using (x, y) velocity multipliers
     pub spread_weights: Vec2,
@@ -32,7 +32,7 @@ pub struct ArcPatternData {
     pub projectile_gap: f32,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct RandomPatternData {
     pub speed_range: Range<f32>,
     pub angle_range: Range<f32>,
@@ -132,11 +132,6 @@ impl WeaponComponent {
         } else {
             None
         }
-    }
-
-    /// Gain projectiles, but limit to the capacity of the weapon
-    pub fn gain_projectiles(&mut self, projectiles: usize) {
-        self.projectile_data.count = (self.projectile_data.count + projectiles).min(self.capacity);
     }
 
     /// Set reload time to a new duration

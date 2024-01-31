@@ -3,7 +3,7 @@ use bevy_rapier2d::prelude::{ExternalImpulse, Velocity};
 use leafwing_input_manager::prelude::ActionState;
 use thetawave_interface::audio::SoundEffectType;
 use thetawave_interface::input::PlayerAction;
-use thetawave_interface::player::{AbilityType, PlayerComponent};
+use thetawave_interface::player::PlayerComponent;
 use thetawave_interface::weapon::{WeaponComponent, WeaponProjectileData};
 
 use crate::spawnable::{FireWeaponEvent, InitialMotion};

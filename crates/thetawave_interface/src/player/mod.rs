@@ -5,6 +5,8 @@ use bevy_time::{Timer, TimerMode};
 use derive_more::{Deref, DerefMut};
 use serde::Deserialize;
 
+use crate::{spawnable::SpawnPosition, weapon::SpreadPattern};
+
 pub mod ability;
 pub mod character;
 
@@ -76,10 +78,6 @@ pub struct PlayerComponent {
     pub attraction_acceleration: f32,
     /// Amount of money character has collected
     pub money: usize,
-    /// Timer for ability cooldown
-    pub ability_cooldown_timer: Timer,
-    /// Timer for ability action
-    pub ability_action_timer: Option<Timer>,
     /// Type of ability
     pub ability_loadout: ability::AbilityLoadout,
     /// Whether the player responds to move inputs
@@ -102,8 +100,6 @@ impl From<&character::Character> for PlayerComponent {
             attraction_distance: character.attraction_distance,
             attraction_acceleration: character.attraction_acceleration,
             money: character.money,
-            ability_cooldown_timer: Timer::from_seconds(character.ability_period, TimerMode::Once),
-            ability_action_timer: None,
             ability_loadout: character.ability_loadout.clone(),
             movement_enabled: true,
             incoming_damage_multiplier: 1.0,
@@ -123,12 +119,26 @@ impl PlayerComponent {
         res
     }
     pub fn disable_special_attacks(&mut self) {
-        self.ability_cooldown_timer.pause();
+        todo!("disable special attacks")
+        //self.ability_cooldown_timer.pause();
     }
     pub fn ability_is_enabled(&self) -> bool {
-        !self.ability_cooldown_timer.paused()
+        todo!("ability is enabled")
+        //self.ability_cooldown_timer.paused()
     }
     pub fn enable_special_attacks(&mut self) {
-        self.ability_cooldown_timer.unpause();
+        todo!("enable special attacks")
+        //self.ability_cooldown_timer.unpause();
     }
+}
+
+#[derive(Component)]
+pub struct PlayerWeaponStatsComponent {
+    pub damage: usize,
+    pub spawn_position: SpawnPosition,
+    pub speed: f32,
+    pub despawn_time: f32,
+    pub count: usize,
+    pub spread_pattern: SpreadPattern,
+    pub size: f32,
 }

@@ -4,7 +4,8 @@ use serde::Deserialize;
 use super::ability;
 use crate::{
     health::HealthComponent,
-    weapon::{WeaponComponent, WeaponData},
+    spawnable::SpawnPosition,
+    weapon::{SpreadPattern, WeaponComponent},
 };
 
 /// The playable character types. To a player, these will have different appearances and abilities.
@@ -50,8 +51,13 @@ pub struct Character {
     pub ability_period: f32,
     /// All of the player abilities
     pub ability_loadout: ability::AbilityLoadout,
-    /// Describes the player's weapon
-    pub weapon: WeaponData,
+    pub damage: usize,
+    pub projectile_spawn_position: SpawnPosition,
+    pub projectile_speed: f32,
+    pub projectile_despawn_time: f32,
+    pub projectile_count: usize,
+    pub projectile_spread_pattern: SpreadPattern,
+    pub projectile_size: f32,
 }
 
 impl From<&Character> for HealthComponent {
@@ -61,11 +67,5 @@ impl From<&Character> for HealthComponent {
             character.shields,
             character.shields_recharge_rate,
         )
-    }
-}
-
-impl From<&Character> for WeaponComponent {
-    fn from(value: &Character) -> Self {
-        WeaponComponent::from(value.weapon.clone())
     }
 }

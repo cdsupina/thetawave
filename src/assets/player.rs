@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use thetawave_interface::character::CharacterType;
+use thetawave_interface::player::character::CharacterType;
 
 #[derive(AssetCollection, Resource)]
 pub struct PlayerAssets {
