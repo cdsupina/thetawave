@@ -84,13 +84,13 @@ pub fn update_weapon_system(
     }
 }
 
-pub(crate) trait WeaponProjectileInitialVelocitiesExt {
+pub(crate) trait WeaponProjectileDataInitialVelocitiesExt {
     /// The initial velocities of `n` projectiles using existing/'partially evaluated' params.
     /// Could be evenly spaced, or something else based on the struct params. max_projectiles
     /// should be greater than 0.
     fn get_linvels(&self, max_projectiles: u16) -> Vec<Vec2>;
 }
-impl WeaponProjectileInitialVelocitiesExt for WeaponProjectileData {
+impl WeaponProjectileDataInitialVelocitiesExt for WeaponProjectileData {
     fn get_linvels(&self, max_projectiles: u16) -> Vec<Vec2> {
         match &self.spread_pattern {
             SpreadPattern::Arc(arc_pattern) => {

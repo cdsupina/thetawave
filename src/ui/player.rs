@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use thetawave_interface::{
-    character::CharacterType,
     health::HealthComponent,
+    player::character::CharacterType,
     player::{PlayerComponent, PlayersResource},
     weapon::WeaponComponent,
 };
@@ -170,20 +170,12 @@ fn build_player_ability_slot_ui(
                     image: asset_server
                         .load(match ability_index {
                             0 => match character {
-                                thetawave_interface::character::CharacterType::Captain => {
-                                    "texture/blast_ability.png"
-                                }
-                                thetawave_interface::character::CharacterType::Juggernaut => {
-                                    "texture/bullet_ability.png"
-                                }
+                                CharacterType::Captain => "texture/blast_ability.png",
+                                CharacterType::Juggernaut => "texture/bullet_ability.png",
                             },
                             _ => match character {
-                                thetawave_interface::character::CharacterType::Captain => {
-                                    "texture/megablast_ability.png"
-                                }
-                                thetawave_interface::character::CharacterType::Juggernaut => {
-                                    "texture/charge_ability.png"
-                                }
+                                CharacterType::Captain => "texture/megablast_ability.png",
+                                CharacterType::Juggernaut => "texture/charge_ability.png",
                             },
                         })
                         .into(),
@@ -369,8 +361,10 @@ pub fn update_player_ui_system(
         for (mut style, ability_value_ui) in player_ui.p3().iter_mut() {
             if player_index == ability_value_ui.player_index && ability_value_ui.ability_index == 1
             {
+                /*
                 style.height =
                     Val::Percent(100.0 * (1.0 - player_component.ability_cooldown_timer.percent()));
+                */
             }
         }
     }

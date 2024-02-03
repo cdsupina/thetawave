@@ -152,7 +152,7 @@ fn apply_effects_on_impact(
                                     player_component.money += *money;
                                 }
                                 ConsumableEffect::GainProjectiles(projectile) => {
-                                    weapon_component.gain_projectiles(*projectile)
+                                    // TODO: Increase the player's projectile count
                                 }
                             }
                         }

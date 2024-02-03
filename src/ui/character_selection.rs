@@ -7,8 +7,8 @@ use leafwing_input_manager::prelude::ActionState;
 use thetawave_interface::input::{MenuAction, MenuExplorer};
 use thetawave_interface::{
     audio::{PlaySoundEffectEvent, SoundEffectType},
-    character::CharacterType,
     character_selection::PlayerJoinEvent,
+    player::character::CharacterType,
     player::{PlayerData, PlayerInput, PlayersResource},
     states::CharacterSelectionCleanup,
 };

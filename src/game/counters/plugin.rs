@@ -199,10 +199,10 @@ mod test {
     use bevy::prelude::{App, Component, Events};
     use bevy::MinimalPlugins;
     use thetawave_interface::audio::SoundEffectType;
-    use thetawave_interface::character::{Character, CharacterType};
     use thetawave_interface::game::historical_metrics::{
         MobKillsByPlayerForCurrentGame, UserStatsByPlayerForCurrentGameCache, DEFAULT_USER_ID,
     };
+    use thetawave_interface::player::character::{Character, CharacterType};
     use thetawave_interface::player::PlayerComponent;
     use thetawave_interface::spawnable::{
         EnemyMobType, Faction, MobDestroyedEvent, MobType, ProjectileType, SpawnPosition,
@@ -269,18 +269,18 @@ mod test {
         let player_1_projectile_event = FireWeaponEvent {
             weapon_projectile_data: WeaponProjectileData {
                 ammunition: ProjectileType::Bullet(Faction::Ally),
-                damage: 0,
-                position: SpawnPosition::Local(Vec2::new(0.0, 40.0)),
-                speed: 1.0,
+                damage: Some(0),
+                position: Some(SpawnPosition::Local(Vec2::new(0.0, 40.0))),
+                speed: Some(1.0),
                 direction: FRAC_PI_2,
-                despawn_time: 0.0,
-                count: 1,
-                spread_pattern: SpreadPattern::Arc(ArcPatternData {
+                despawn_time: Some(0.0),
+                count: Some(1),
+                spread_pattern: Some(SpreadPattern::Arc(ArcPatternData {
                     spread_weights: Vec2::new(0.5, 1.0),
                     max_spread: FRAC_PI_2,
                     projectile_gap: PI,
-                }),
-                size: 1.0,
+                })),
+                size: Some(1.0),
                 sound: SoundEffectType::PlayerFireBlast,
             },
             source_transform: Default::default(),

@@ -4,7 +4,7 @@ use serde::Deserialize;
 use std::{collections::HashMap, string::ToString};
 use thetawave_interface::{
     audio::PlaySoundEffectEvent,
-    spawnable::{Faction, ProjectileType, SpawnableType},
+    spawnable::{Faction, ProjectileType, SpawnPosition, SpawnableType},
     states::GameCleanup,
     weapon::WeaponProjectileData,
 };
@@ -18,7 +18,6 @@ use crate::{
     assets::ProjectileAssets,
     game::GameParametersResource,
     spawnable::{SpawnableBehavior, SpawnableComponent},
-    weapon::WeaponProjectileInitialVelocitiesExt,
 };
 
 mod behavior;
@@ -128,10 +127,8 @@ pub fn spawn_projectile_from_weapon(
     // Create the transform for spawned projectiles
     let projectile_transform = Transform {
         translation: match weapon_projectile_data.position {
-            thetawave_interface::spawnable::SpawnPosition::Global(pos) => pos,
-            thetawave_interface::spawnable::SpawnPosition::Local(pos) => {
-                source_transform.translation.xy() + pos
-            }
+            SpawnPosition::Global(pos) => pos,
+            SpawnPosition::Local(pos) => source_transform.translation.xy() + pos,
         }
         .extend(projectile_data.z_level),
         scale: Vec2::splat(game_parameters.sprite_scale * weapon_projectile_data.size).extend(1.0),
