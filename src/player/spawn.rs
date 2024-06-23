@@ -1,11 +1,15 @@
 use bevy::core::Name;
+use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::ecs::system::{Commands, Res};
 use bevy::hierarchy::{BuildChildren, ChildBuilder};
 use bevy::input::gamepad::Gamepad;
 use bevy::math::Vec3;
+use bevy::prelude::{default, Camera2dBundle, Query, With};
+use bevy::render::camera::{Camera, ClearColorConfig, RenderTarget};
 use bevy::render::color::Color;
 use bevy::sprite::{Sprite, SpriteBundle};
 use bevy::transform::components::Transform;
+use bevy::ui::UiImage;
 use bevy_rapier2d::dynamics::{ExternalImpulse, LockedAxes, RigidBody, Velocity};
 use bevy_rapier2d::geometry::{ActiveEvents, Collider, ColliderMassProperties, Restitution};
 use leafwing_input_manager::{prelude::ActionState, InputManagerBundle};
@@ -15,7 +19,11 @@ use thetawave_interface::abilities::{
 };
 use thetawave_interface::input::{InputsResource, PlayerAction};
 use thetawave_interface::player::{PlayerBundle, PlayerIDComponent};
-use thetawave_interface::{health::HealthComponent, player::PlayerInput, states::GameCleanup};
+use thetawave_interface::{
+    health::HealthComponent,
+    player::{PlayerInput, PlayerPortraitUi},
+    states::GameCleanup,
+};
 
 use crate::{
     assets,
@@ -82,7 +90,10 @@ pub(super) fn spawn_players_system(
     players_resource: Res<PlayersResource>,
     inputs_res: Res<InputsResource>,
     abilities_res: Res<AbilitiesResource>,
+    portrait_ui: Query<&UiImage, With<PlayerPortraitUi>>,
 ) {
+    let player_portrait = portrait_ui.get_single().unwrap();
+
     // check if more than one player is playing
     let is_multiplayer = players_resource.player_data.get(1).is_some();
 
@@ -163,6 +174,20 @@ pub(super) fn spawn_players_system(
                 .with_children(|parent| {
                     parent.spawn_slot_1_ability(&abilities_res, &character.slot_1_ability);
                     parent.spawn_slot_2_ability(&abilities_res, &character.slot_2_ability);
+
+                    parent.spawn(Camera2dBundle {
+                        transform: Transform::from_xyz(0.0, 0.0, game_parameters.camera_z)
+                            .with_scale(Vec3::new(0.35, 0.35, 1.0)),
+                        camera: Camera {
+                            order: 0,
+                            hdr: true,
+                            clear_color: ClearColorConfig::Custom(Color::BLUE.with_a(0.2)),
+                            target: RenderTarget::Image(player_portrait.texture.clone()),
+                            ..default()
+                        },
+                        tonemapping: Tonemapping::TonyMcMapface,
+                        ..default()
+                    });
                 });
 
             // add colored outline to player if multiplayer

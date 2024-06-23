@@ -5,6 +5,9 @@ use bevy_ecs::{bundle::Bundle, prelude::Component};
 use bevy_math::Vec2;
 use derive_more::{Deref, DerefMut};
 
+#[derive(Component)]
+pub struct PlayerPortraitUi;
+
 /// Parameters for how to spawn new players. By default, the player can do anything.
 #[derive(Resource, Debug, Default, Deref, DerefMut)]
 pub struct InputRestrictionsAtSpawn(InputRestrictions);

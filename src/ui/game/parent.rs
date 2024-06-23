@@ -1,7 +1,8 @@
 use bevy::{
-    asset::Handle,
+    asset::{Assets, Handle},
     ecs::system::{Commands, Res},
     hierarchy::BuildChildren,
+    prelude::ResMut,
     render::{color::Color, texture::Image},
     text::Font,
     ui::{
@@ -51,6 +52,7 @@ pub(super) trait GameCenterUiChildBuilderExt {
 pub(super) trait PlayerUiChildBuilderExt {
     fn spawn_player_ui(
         &mut self,
+        textures: &mut Assets<Image>,
         characters_res: &CharactersResource,
         id: PlayerIDComponent,
         players_res: &PlayersResource,
@@ -86,6 +88,7 @@ pub(super) fn setup_game_ui_system(
     ui_assets: Res<UiAssets>,
     players_resource: Res<PlayersResource>,
     characters_resource: Res<CharactersResource>,
+    mut textures: ResMut<Assets<Image>>,
 ) {
     let font: Handle<Font> = ui_assets.lunchds_font.clone();
 
@@ -182,6 +185,7 @@ pub(super) fn setup_game_ui_system(
                     .with_children(|middle_left| {
                         // Player 1 Ui on the left
                         middle_left.spawn_player_ui(
+                            &mut textures,
                             &characters_resource,
                             PlayerIDComponent::One,
                             &players_resource,
@@ -221,6 +225,7 @@ pub(super) fn setup_game_ui_system(
                     .with_children(|middle_right| {
                         // Player 1 Ui onm the left
                         middle_right.spawn_player_ui(
+                            &mut textures,
                             &characters_resource,
                             PlayerIDComponent::Two,
                             &players_resource,

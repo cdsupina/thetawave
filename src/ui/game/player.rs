@@ -1,5 +1,5 @@
 use bevy::{
-    asset::Handle,
+    asset::{Assets, Handle},
     ecs::{
         component::Component,
         entity::Entity,
@@ -7,10 +7,16 @@ use bevy::{
         system::{Commands, Query},
     },
     hierarchy::{BuildChildren, ChildBuilder, Children, DespawnRecursiveExt},
-    render::{color::Color, texture::Image},
+    render::{
+        color::Color,
+        render_resource::{
+            Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
+        },
+        texture::{BevyDefault, Image, ImageSampler, TextureFormatPixelInfo},
+    },
     ui::{
         node_bundles::{ImageBundle, NodeBundle},
-        FlexDirection, Style, UiRect, Val,
+        FlexDirection, Style, UiImage, UiRect, Val,
     },
     utils::default,
 };
@@ -18,7 +24,7 @@ use thetawave_interface::{
     abilities::{AbilityCooldownComponent, AbilitySlotIDComponent},
     character::Character,
     health::HealthComponent,
-    player::{PlayerComponent, PlayerIDComponent, PlayersResource},
+    player::{PlayerComponent, PlayerIDComponent, PlayerPortraitUi, PlayersResource},
 };
 
 use crate::{assets::UiAssets, player::CharactersResource};
@@ -105,6 +111,7 @@ impl PlayerIDComponentExt for PlayerIDComponent {
 impl PlayerUiChildBuilderExt for ChildBuilder<'_> {
     fn spawn_player_ui(
         &mut self,
+        textures: &mut Assets<Image>,
         characters_res: &CharactersResource,
         id: PlayerIDComponent,
         players_res: &PlayersResource,
@@ -117,6 +124,46 @@ impl PlayerUiChildBuilderExt for ChildBuilder<'_> {
                 .characters
                 .get(&player_data.character)
                 .unwrap();
+
+            let size = Extent3d {
+                width: 100,
+                height: 100,
+                ..default()
+            };
+
+            let format = TextureFormat::bevy_default();
+            let data = vec![0; size.width as usize * size.height as usize * format.pixel_size()];
+
+            self.spawn(ImageBundle {
+                style: Style {
+                    width: Val::Px(100.0),
+                    aspect_ratio: Some(1.0),
+                    ..default()
+                },
+                image: UiImage {
+                    texture: textures.add(Image {
+                        data,
+                        texture_descriptor: TextureDescriptor {
+                            usage: TextureUsages::TEXTURE_BINDING
+                                | TextureUsages::COPY_DST
+                                | TextureUsages::RENDER_ATTACHMENT,
+                            label: None,
+                            size,
+                            mip_level_count: 1,
+                            sample_count: 1,
+                            dimension: TextureDimension::D2,
+                            format: TextureFormat::bevy_default(),
+                            view_formats: &[],
+                        },
+                        sampler: ImageSampler::Default,
+                        texture_view_descriptor: None,
+                        ..default()
+                    }),
+                    ..default()
+                },
+                ..default()
+            })
+            .insert(PlayerPortraitUi);
 
             // Parent player ui node
             self.spawn(NodeBundle {

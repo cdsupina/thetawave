@@ -21,7 +21,7 @@ impl Plugin for GameUiPlugin {
 
         app.add_systems(
             OnEnter(states::AppStates::Game),
-            parent::setup_game_ui_system.after(GameEnterSet::BuildUi),
+            parent::setup_game_ui_system.in_set(GameEnterSet::BuildUi),
         );
 
         app.add_systems(

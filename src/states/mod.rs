@@ -77,8 +77,8 @@ impl Plugin for StatesPlugin {
                 (
                     GameEnterSet::Initialize,
                     GameEnterSet::BuildLevel,
-                    GameEnterSet::SpawnPlayer,
                     GameEnterSet::BuildUi,
+                    GameEnterSet::SpawnPlayer,
                 )
                     .chain(),
             );
